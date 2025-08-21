@@ -4,17 +4,17 @@ PODS:
   - fast_float (8.0.0)
   - FBLazyVector (0.80.1)
   - fmt (11.0.2)
-  - GCIDOSDK (2.0.9.0):
-    - GTCommonSDK (>= 3.0.0.0)
   - glog (0.3.5)
   - GTCommonSDK (3.1.10.0):
     - ZXSDK
+  - GYSDK (3.1.0.0):
+    - GTCommonSDK (>= 3.0.0.0)
+  - GySdkRN (1.0.1):
+    - GYSDK
+    - React
   - hermes-engine (0.80.1):
     - hermes-engine/Pre-built (= 0.80.1)
   - hermes-engine/Pre-built (0.80.1)
-  - IdoSdkRN (1.0.2):
-    - GCIDOSDK
-    - React
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -2140,8 +2140,8 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - GySdkRN (from `../node_modules/react-native-gysdk`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
-  - IdoSdkRN (from `../node_modules/react-native-idosdk`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
   - RCTRequired (from `../node_modules/react-native/Libraries/Required`)
@@ -2212,8 +2212,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - GCIDOSDK
     - GTCommonSDK
+    - GYSDK
     - SocketRocket
     - ZXSDK
 
@@ -2230,11 +2230,11 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/fmt.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  GySdkRN:
+    :path: "../node_modules/react-native-gysdk"
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2025-05-06-RNv0.80.0-4eb6132a5bf0450bf4c6c91987675381d7ac8bca
-  IdoSdkRN:
-    :path: "../node_modules/react-native-idosdk"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -2372,11 +2372,11 @@ SPEC CHECKSUMS:
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
   FBLazyVector: 09f03e4b6f42f955734b64a118f86509cc719427
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
-  GCIDOSDK: bb13add2180a67fa5b10b106e9883c3210c17a6d
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   GTCommonSDK: aa0cdaada5e31c2dc173c8170127d50f16a439c7
+  GYSDK: bd900870a591e2af65cf6dc8497de650b5aa1bcc
+  GySdkRN: c58bfd7247859c176f3ad657f3423d547213b16c
   hermes-engine: 4f07404533b808de66cf48ac4200463068d0e95a
-  IdoSdkRN: dc579128a07df7b2d3b046f5c02049d1b92b12b9
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: efa5010912100e944a7ac9a93a157e1def1988fe
   RCTRequired: bbc4cf999ddc4a4b076e076c74dd1d39d0254630

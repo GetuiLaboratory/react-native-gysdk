@@ -11,28 +11,28 @@ import {
   NativeEventEmitter
 } from 'react-native';
 
-import GetuiIdo from 'react-native-idosdk';
+import GetuiGy from 'react-native-gysdk';
 
-// 监听方式二：
-var { NativeAppEventEmitter } = require('react-native');
-let names: string[] = ["GTCountSDKDidReceiveGtcid"];
+// // 监听方式二：
+// var { NativeAppEventEmitter } = require('react-native');
+// let names: string[] = ["GTCountSDKDidReceiveGtcid"];
 
-// 监听个推回调
-const listenerCallBack = (eventName: string, message: any) => {
-  console.log('Event Received', `Event: ${eventName}\nMessage: ${JSON.stringify(message)}`);
-  switch (eventName) {
-    case 'GTCountSDKDidReceiveGtcid':
-      console.log("收到gtcid回调", message)
-      break;
-    //...开发者自行处理
-  }
-};
+// // 监听个推回调
+// const listenerCallBack = (eventName: string, message: any) => {
+//   console.log('Event Received', `Event: ${eventName}\nMessage: ${JSON.stringify(message)}`);
+//   switch (eventName) {
+//     case 'GTCountSDKDidReceiveGtcid':
+//       console.log("收到gtcid回调", message)
+//       break;
+//     //...开发者自行处理
+//   }
+// };
 
-// 为每个事件创建一个封装的回调函数
-names.forEach((eventName) => {
-  console.log(`Adding listener for ${eventName}`);
-  NativeAppEventEmitter.addListener(eventName, (message: any) => listenerCallBack(eventName, message));
-});
+// // 为每个事件创建一个封装的回调函数
+// names.forEach((eventName) => {
+//   console.log(`Adding listener for ${eventName}`);
+//   NativeAppEventEmitter.addListener(eventName, (message: any) => listenerCallBack(eventName, message));
+// });
 
 
 
@@ -73,20 +73,12 @@ function App() {
           title="startSdk"
           onPress={() => {
             //开发者根据自己的情况设置下方属性
-            GetuiIdo.registerEventProperties({"commonPro1":"cc1","commonPro2":100})
-
-            GetuiIdo.setSessionTime(30001)
-            GetuiIdo.setMinAppActiveDuration(0)
-            GetuiIdo.setMaxAppActiveDuration(12*3600*1000)
-            GetuiIdo.setEventUploadInterval(10000)
-            GetuiIdo.setEventForceUploadSize(30)
-            GetuiIdo.setProfileUploadInterval(5000)
-            GetuiIdo.setProfileForceUploadSize(5)
-            
-            GetuiIdo.setDebugEnable(true)//仅测试环境
-            GetuiIdo.startSdk("xXmjbbab3b5F1m7wAYZoG2","appstore")
-
-            GetuiIdo.setUserId("123321")
+            GetuiGy.setDebug(true)//仅测试环境
+            GetuiGy.setPreLoginTimeout(10);
+            GetuiGy.setEloginTimeout(10);
+            GetuiGy.startSdk("5xpxEg5qvI9PNGH2kQAia2",(succ,gtcid) => {
+              console.log("start complete:", succ, gtcid);
+            })
           }}
           color={getColors(isDarkMode).button}
 
@@ -97,7 +89,7 @@ function App() {
           title="version"
           onPress={() => {
 
-            GetuiIdo.version((version) => {
+            GetuiGy.version((version) => {
               console.log("SDK Version:", version);
             });
           }}
@@ -107,7 +99,7 @@ function App() {
           key={1}
           title="gtcid"
           onPress={() => {
-            GetuiIdo.gtcid((cid) => {
+            GetuiGy.gtcid((cid) => {
               Alert.alert('gtcid:', cid)
             });
           }}
@@ -116,31 +108,84 @@ function App() {
         />
 
         <Text style={[styles.headerText, { color: isDarkMode ? '#000' : '#000' }]}>
-          Track
+          Info
         </Text>
 
         <Button
-          title="track begin"
+          title="currentNetworkInfo"
           onPress={() => {
-            GetuiIdo.trackCustomKeyValueEventBegin("event1")
+            GetuiGy.currentNetworkInfo((info) => {
+              console.log('currentNetworkInfo:', info['carrier'],info['network'])
+              //Alert.alert('currentNetworkInfo:', info.toString())
+            })
           }}
         />
         <Button
-          title="track end"
+          title="CurrentCarrierCount"
           onPress={() => {
-            GetuiIdo.trackCustomKeyValueEventEnd("event1",{"name":"ak","age":99},"");
+            GetuiGy.currentCarrierCount((count) => {
+              Alert.alert('getCurrentCarrierCount:', count.toString())
+            })
+          }}
+        />
+
+        <Text style={[styles.headerText, { color: isDarkMode ? '#000' : '#000' }]}>
+          PreLogin
+        </Text>
+
+        <Button
+          title="preGetToken"
+          onPress={() => {
+            GetuiGy.isPreGettedTokenValidate((isvalid)=>{
+              if (!isvalid) {
+                GetuiGy.preGetToken((map)=>{
+                  console.log('preGetToken result: ',map)
+                })
+              } else {
+                   console.log('isPreGettedToken is Validate')
+              }
+            })
           }}
         />
         <Button
-          title="track count"
+          title="deletePreResultCache"
           onPress={() => {
-             GetuiIdo.trackCountEvent("countEvent1",{"name":"lucky","age":1},"");
+             GetuiGy.deletePreResultCache()
           }}
         />
+
+        <Text style={[styles.headerText, { color: isDarkMode ? '#000' : '#000' }]}>
+          Login
+        </Text>
+
         <Button
-          title="setProfile"
+          title="login"
           onPress={() => {
-            GetuiIdo.setProfile({"city":"hangzhou","mind":true},"");
+            GetuiGy.login((succ,code,msg)=>{
+            console.log('login result: ',succ, code, msg)
+            })
+          }}
+        />  
+
+        <Text style={[styles.headerText, { color: isDarkMode ? '#000' : '#000' }]}>
+          Check Phone Number
+        </Text>
+
+        <Button
+          title="getPhoneVerifyToken"
+          onPress={() => {
+            GetuiGy.getPhoneVerifyToken((succ,code,msg)=>{
+            console.log('getPhoneVerifyToken result: ',succ, code, msg)
+            })
+          }}
+        />  
+
+        <Button
+          title="checkPhoneNumber"
+          onPress={() => {
+            GetuiGy.checkPhoneNumber('13123877803',(succ,code,msg)=>{
+            console.log('checkPhoneNumber result: ',succ, code, msg)
+            })
           }}
         />  
       </View>

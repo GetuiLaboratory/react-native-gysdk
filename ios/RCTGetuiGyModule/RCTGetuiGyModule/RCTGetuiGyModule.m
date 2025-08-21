@@ -42,6 +42,7 @@
 
 @interface RCTGetuiGyModule ()
 @property (nonatomic, strong) NSMutableArray<RCTGetuiGyModuleEvent *> *cachedEvents;
+@property (nonatomic, copy) NSString *appId;
 @end
 
 
@@ -148,16 +149,14 @@ RCT_EXPORT_MODULE();
 //MARK: -- SDK
 
 
-//+ (void)startSDKWithAppId:(NSString *)appId withChannelId:(NSString *)channelId delegate:(id<GeYanSdkDelegate>)delegate;
-/**
- *  销毁SDK，并且释放资源
- */
 RCT_EXPORT_METHOD(startSdk:(NSString *)appId callback:(RCTResponseSenderBlock)callback)
 {
     
     NSLog(@"GYSDK>>>startSDKWithAppId %@", appId);
+    self.appId = appId;
     [GeYanSdk startWithAppId:appId
                 withCallback:^(BOOL isSuccess, NSError *error, NSString *gtcid) {
+        NSLog(@"GYSDK>>>startSDKWithAppId result isSuccess:%@ error:%@ gtcid:%@", @(isSuccess),error,gtcid);
         callback(@[@(isSuccess),gtcid]);
     }];
 }
@@ -168,11 +167,11 @@ RCT_EXPORT_METHOD(version:(RCTResponseSenderBlock)callback)
     callback(@[[GeYanSdk getVersion]]);
 }
  
-RCT_EXPORT_METHOD(gyuid:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_METHOD(gtcid:(RCTResponseSenderBlock)callback)
 {
     NSLog(@"GYSDK>>>gtcid");
-    NSString *gyuid = [GeYanSdk gyuid]?:@"";
-    callback(@[gyuid]);
+    NSString *gtcid = [GeYanSdk gyuid]?:@"";
+    callback(@[gtcid]);
 }
 
 //MARK: - Properties
@@ -201,19 +200,18 @@ RCT_EXPORT_METHOD(currentNetworkInfo:(RCTResponseSenderBlock)callback)
     callback(@[[GeYanSdk currentNetworkInfo]]);
 }
  
-RCT_EXPORT_METHOD(getCurrentCarrierCount:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_METHOD(currentCarrierCount:(RCTResponseSenderBlock)callback)
 {
-    NSLog(@"GYSDK>>>getCurrentCarrierCount");
-    callback(@[[GeYanSdk getCurrentCarrierCount]]);
+    NSLog(@"GYSDK>>>currentCarrierCount");
+    callback(@[@([GeYanSdk getCurrentCarrierCount])]);
 }
  
 //MARK: - PreLogin
 
-RCT_EXPORT_METHOD(isPreGettedTokenValidate)
+RCT_EXPORT_METHOD(isPreGettedTokenValidate:(RCTResponseSenderBlock)callback)
 {
   NSLog(@"GYSDK>>>isPreGettedTokenValidate");
-    //akak test?
-   return [GeYanSdk isPreGettedTokenValidate];
+    callback(@[@([GeYanSdk isPreGettedTokenValidate])]);
 }
 
 RCT_EXPORT_METHOD(deletePreResultCache)
@@ -226,7 +224,7 @@ RCT_EXPORT_METHOD(preGetToken:(RCTResponseSenderBlock)callback)
 {
    NSLog(@"GYSDK>>>preGetToken");
     [GeYanSdk preGetToken:^(NSDictionary *preDic) {
-        NSLog(@"preGetToken: %@ %@", preDic, preDic[@"msg"]);
+        NSLog(@"GYSDK>>>preGetToken: %@ %@", preDic, preDic[@"msg"]);
         callback(@[preDic]);
     }];
 }
@@ -236,30 +234,18 @@ RCT_EXPORT_METHOD(preGetToken:(RCTResponseSenderBlock)callback)
 RCT_EXPORT_METHOD(login:(RCTResponseSenderBlock)callback)
 {
    NSLog(@"GYSDK>>>login");
-    [GeYanSdk getPhoneVerifyTokenCallback:^(NSDictionary *result) {
-        NSLog(@"GYSDK>>>getPhoneVerifyToken: %@ %@", result, result[@"msg"]);
-        NSString *msg = result[@"msg"] ?:@"";
-        NSNumber *code = result[@"code"];
-        NSString *token = result[@"token"];
-        if (token.length > 0) {
-            callback(@[@(YES), code, msg);
-        } else {
-            callback(@[@(NO), code, msg);
-        }
-    }];
-    
     [GyOneLoginPro requestTokenWithCompletion:^(NSDictionary * _Nullable result) {
         NSLog(@"GYSDK>>>login result:%@", result);
         NSString *msg = result[@"msg"] ?:@"";
         NSNumber *code = result[@"code"];
       
 #if DEBUG
-        [[RCTGetuiGyModule sharedGetuiGyModule] queryPhoneNumber:result]];
+//        [[RCTGetuiGyModule sharedGetuiGyModule] queryPhoneNumber:result];
 #endif
         if ([result[@"code"] isEqualToNumber:@30000]) {
-            callback(@[@(YES), code, msg);
+            callback(@[@(YES), code, msg]);
         } else {
-            callback(@[@(NO), code, msg);
+            callback(@[@(NO), code, msg]);
         }
     }];
 }
@@ -278,15 +264,15 @@ RCT_EXPORT_METHOD(login:(RCTResponseSenderBlock)callback)
     NSString *token = result[@"token"] ?:@"";
     NSString *pid = result[@"processID"] ?:@"";
     NSString *gyuid = result[@"gyuid"] ?:@"";
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     NSDictionary *params = @{
-        @"appId": [appDelegate getAppID],
+        @"appId": self.appId,
         @"gyuid": gyuid,
         @"token": token,
         @"processId": pid
     };
     NSLog(@"json : %@", params);
-    NSData *data = [Utils dic2JsonData:params];
+    NSData *data = [self dic2JsonData:params];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -304,10 +290,10 @@ RCT_EXPORT_METHOD(login:(RCTResponseSenderBlock)callback)
             
             CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
             //{"errno":0,"data":{"msg":"成功","result":"20000","data":{"pn":"15258060533"}}}
-            NSDictionary *dic = [Utils jsonData2Dic:data];
+            NSDictionary *dic = [self jsonData2Dic:data];
             NSLog(@"收到回执: %lf", endTime);
             NSLog(@"收到回执内容：%@", dic);
-            NSLog(@"取号耗时: %lf，token：%@", (endTime - self.startTime) * 1000, token);
+            //NSLog(@"取号耗时: %lf，token：%@", (endTime - self.startTime) * 1000, token);
             
 //            if ([dic[@"errno"] intValue] == 0) {
 //                SuccessController *ctrl = [[SuccessController alloc] init];
@@ -324,7 +310,7 @@ RCT_EXPORT_METHOD(login:(RCTResponseSenderBlock)callback)
 
 //MARK: - 本机号码校验
 
-RCT_EXPORT_METHOD(getPhoneVerifyTokenCallback:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_METHOD(getPhoneVerifyToken:(RCTResponseSenderBlock)callback)
 {
    NSLog(@"GYSDK>>>getPhoneVerifyTokenCallback");
     [GeYanSdk getPhoneVerifyTokenCallback:^(NSDictionary *result) {
@@ -333,9 +319,9 @@ RCT_EXPORT_METHOD(getPhoneVerifyTokenCallback:(RCTResponseSenderBlock)callback)
         NSNumber *code = result[@"code"];
         NSString *token = result[@"token"];
         if (token.length > 0) {
-            callback(@[@(YES), code, msg);
+            callback(@[@(YES), code, msg]);
         } else {
-            callback(@[@(NO), code, msg);
+            callback(@[@(NO), code, msg]);
         }
     }];
 }
@@ -345,16 +331,43 @@ RCT_EXPORT_METHOD(checkPhoneNumber:(NSString *)pn callback:(RCTResponseSenderBlo
    NSLog(@"GYSDK>>>checkPhoneNumber");
     [GeYanSdk checkPhoneNumber:pn andCallback:^(NSDictionary * _Nullable verifyDictionary) {
         NSLog(@"GYSDK>>>checkPhoneNumber: %@", verifyDictionary);
-        NSString *msg = result[@"msg"] ?:@"";
+        NSString *msg = verifyDictionary[@"msg"] ?:@"";
         NSNumber *code = verifyDictionary[@"code"];
         if ([code isEqualToNumber:@30000]) {
-            callback(@[@(YES),code, msg);
+            callback(@[@(YES),code, msg]);
         } else {
-            callback(@[@(NO),code, msg);
+            callback(@[@(NO),code, msg]);
         }
     }];
 }
- 
+
+- (NSData *)dic2JsonData:(NSDictionary *)dictionary {
+    if (!dictionary || ![dictionary isKindOfClass:[NSDictionary class]]) {
+        return nil;
+    }
+    
+    @try {
+        NSError *error = nil;
+        // iOS5中，苹果引入了一个解析JSON串的NSJSONSerialization类
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:kNilOptions error:&error];
+        if (!jsonData || error) {
+            NSLog(@"JSONSerialization Error:%@", error);
+            return nil;
+        }
+        
+        return jsonData;
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@", exception);
+    }
+    
+    return nil;
+}
+
+- (NSDictionary*)jsonData2Dic:(NSData*)data {
+   NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    return dic;
+}
 
 @end
 

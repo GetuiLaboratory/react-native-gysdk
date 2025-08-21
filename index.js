@@ -10,15 +10,17 @@ const GetuiGyModule = NativeModules.GetuiGyModule;
  * @param  {string} message
  */
 const log = (message) => {
-	console.log(`[Getui][Ido] ${message}`);
+	console.log(`[Getui][Gy] ${message}`);
 }
 
 export default class GetuiGy {
-    /**
+	/**
 	 * 初始化推送服务 只有Android,  IOS在AppDelegate中初始化
-     */
-    static startSdk(appid, channel){
-    	GetuiGyModule.startSdk(appid, channel);
+	 */
+	static startSdk(appid, cb){
+		GetuiGyModule.startSdk(appid,(success, gtcid)=>{
+			cb(success, gtcid)
+		});
 	} 
 
 	/**
@@ -36,58 +38,55 @@ export default class GetuiGy {
 			cb(param)
 		});
 	} 
-	static setDebugEnable(isEnable) {
-		GetuiGyModule.setDebugEnable(isEnable);
-	}
-	
-	static setApplicationGroupIdentifier(idnetifier) {
-		GetuiGyModule.setApplicationGroupIdentifier(identifier);
+	static setDebug(isEnable) {
+		GetuiGyModule.setDebug(isEnable);
 	}
 
-	static setSessionTime(time) {
-		GetuiGyModule.setSessionTime(time);
+	static setPreLoginTimeout(time) {
+		GetuiGyModule.setPreLoginTimeout(time);
 	}
 
-	static setMinAppActiveDuration(val) {
-		GetuiGyModule.setMinAppActiveDuration(val);
-	}
-	static setMaxAppActiveDuration(val) {
-		GetuiGyModule.setMaxAppActiveDuration(val);
+	static setEloginTimeout(time) {
+		GetuiGyModule.setEloginTimeout(time);
 	}
 
-	static setEventUploadInterval(val) {
-		GetuiGyModule.setEventUploadInterval(val);
-	}
-	static setEventForceUploadSize(val) {
-		GetuiGyModule.setEventForceUploadSize(val);
-	}
-	static setProfileUploadInterval(val) {
-		GetuiGyModule.setProfileUploadInterval(val);
-	}
-	static setProfileForceUploadSize(val) {
-		GetuiGyModule.setProfileForceUploadSize(val);
-	}
-	static setUserId(val) {
-		GetuiGyModule.setUserId(val);
-	}
-	static setSyncGenerateGtcid(val) {
-		GetuiGyModule.setSyncGenerateGtcid(val);
-	}   
-	static registerEventProperties(val) {
-		GetuiGyModule.registerEventProperties(val);
-	}    
- 
-	static trackCustomKeyValueEventBegin(eventId) {
-		GetuiGyModule.trackCustomKeyValueEventBegin(eventId);
+	static currentNetworkInfo(cb) {
+		GetuiGyModule.currentNetworkInfo((param)=>{
+			cb(param)
+		});
 	} 
-	static trackCustomKeyValueEventEnd(eventId, args, ext) {
-		GetuiGyModule.trackCustomKeyValueEventEnd(eventId, args, ext);
+	static currentCarrierCount(cb) {
+		GetuiGyModule.currentCarrierCount((param)=>{
+			cb(param)
+		});
 	} 
-	static trackCountEvent(eventId, args, ext) {
-		GetuiGyModule.trackCountEvent(eventId, args, ext);
-	} 
-	static setProfile(profiles, ext) {
-		GetuiGyModule.setProfile(profiles, ext);
+	static isPreGettedTokenValidate(cb) {
+		GetuiGyModule.isPreGettedTokenValidate((param)=>{
+			cb(param)
+		});
 	}  
+	static deletePreResultCache() {
+		GetuiGyModule.deletePreResultCache();
+	}
+	static preGetToken(cb) {
+		GetuiGyModule.preGetToken((param)=>{
+			cb(param)
+		});
+	}
+	static login(cb) {
+		GetuiGyModule.login((succ,code,msg)=>{
+			cb(succ,code,msg)
+		});
+	} 
+	static getPhoneVerifyToken(cb) {
+		GetuiGyModule.getPhoneVerifyToken((succ,code,msg)=>{
+			cb(succ,code,msg)
+		});
+	}
+	static checkPhoneNumber(pn,cb) {
+		GetuiGyModule.checkPhoneNumber(pn,(succ,code,msg)=>{
+			cb(succ,code,msg)
+		});
+	} 
   
 }

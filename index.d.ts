@@ -1,35 +1,27 @@
 
 
 export default class GetuiGy { 
-	static startSdk(appid: string, channel: string): void;
+	static startSdk(appid: string, cb: (success: boolean, gtcid: string) => void): void;
 	 
 	static gtcid(cb: (param: string) => void): void;
  
 	static version(cb: (param: string) => void): void;
  
-	static setDebugEnable(isEnable: boolean): void;
+	static setDebug(isEnable: boolean): void;
+
+	static setPreLoginTimeout(time: number): void;
+
+	static setEloginTimeout(time: number);
+
+	static currentNetworkInfo(cb: (map: Map) => void);
+	static currentCarrierCount(cb: (count: number) => void);
+
+	static isPreGettedTokenValidate(cb: (isvalid: boolean) => void): void;
 	
-	static setApplicationGroupIdentifier(identifier: string): void;
+	static deletePreResultCache();
 
-	static setSessionTime(time: number): void;
-
-	static setMinAppActiveDuration(val: number);
-	static setMaxAppActiveDuration(val: number);
-
-	static setEventUploadInterval(val: number);
-	static setEventForceUploadSize(val: number);
-
-	static setProfileUploadInterval(val: number);
-	static setProfileForceUploadSize(val: number);
-	
-	static setUserId(val: string);
-	static setSyncGenerateGtcid(val: boolean);
-	static registerEventProperties(val: Map);
-
-	
-	static trackCustomKeyValueEventBegin(eventId:string);
-	static trackCustomKeyValueEventEnd(eventId:string, args:Map, ext:string);
-	static trackCountEvent(eventId:string, args:Map, ext:string);
-	static setProfile(profiles:Map, ext:string) 
-  
+	static preGetToken(cb: (map: Map) => void);
+	static login(cb: (success: boolean, code:number, msg:string) => void);
+	static getPhoneVerifyToken(cb: (success: boolean, code:number, msg:string) => void);
+	static checkPhoneNumber(pn:string, cb: (success: boolean, code:number, msg:string) => void);
 }

@@ -282,7 +282,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ent.com.getui.demo;
+				PRODUCT_BUNDLE_IDENTIFIER = ent.com.getui.geyan.demo;
 				PRODUCT_NAME = AwesomeProject;
 				SWIFT_OBJC_BRIDGING_HEADER = "AwesomeProject-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -311,7 +311,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ent.com.getui.demo;
+				PRODUCT_BUNDLE_IDENTIFIER = ent.com.getui.geyan.demo;
 				PRODUCT_NAME = AwesomeProject;
 				SWIFT_OBJC_BRIDGING_HEADER = "AwesomeProject-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '12.0'
 
   s.source          = { :git => "https://github.com/GetuiLaboratory/react-native-gysdk.git" }
-  s.source_files    = 'ios/RCTGetuiIdoModule/RCTGetuiIdoModule/*.{h,m}'
+  s.source_files    = 'ios/RCTGetuiGyModule/RCTGetuiGyModule/*.{h,m}'
   s.preserve_paths  = "*.js"
   s.frameworks      = 'SystemConfiguration', 'CFNetwork','CoreTelephony','CoreLocation','AVFoundation','Security','AdSupport'
   s.weak_frameworks = 'UserNotifications','AppTrackingTransparency','Network'
@@ -22,6 +22,6 @@ Pod::Spec.new do |s|
   s.swift_versions = ['5']
 
   s.dependency 'React'
-  s.dependency 'GCgysdk'
+  s.dependency 'GYSDK'
 
 end
