@@ -74,8 +74,8 @@ export default class GetuiGy {
 		});
 	}
 	static login(cb) {
-		GetuiGyModule.login((succ,code,msg)=>{
-			cb(succ,code,msg)
+		GetuiGyModule.login((succ,res,msg)=>{
+			cb(succ,res,msg)
 		});
 	} 
 	static getPhoneVerifyToken(cb) {

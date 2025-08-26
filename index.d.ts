@@ -21,7 +21,7 @@ export default class GetuiGy {
 	static deletePreResultCache();
 
 	static preGetToken(cb: (map: Map) => void);
-	static login(cb: (success: boolean, code:number, msg:string) => void);
+	static login(cb: (success: boolean, result:Map, msg:string) => void);
 	static getPhoneVerifyToken(cb: (success: boolean, code:number, msg:string) => void);
 	static checkPhoneNumber(pn:string, cb: (success: boolean, code:number, msg:string) => void);
 }

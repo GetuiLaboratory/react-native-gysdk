@@ -9,7 +9,7 @@ PODS:
     - ZXSDK
   - GYSDK (3.1.0.0):
     - GTCommonSDK (>= 3.0.0.0)
-  - GySdkRN (1.0.1):
+  - GySdkRN (1.0.3):
     - GYSDK
     - React
   - hermes-engine (0.80.1):
@@ -2375,7 +2375,7 @@ SPEC CHECKSUMS:
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   GTCommonSDK: aa0cdaada5e31c2dc173c8170127d50f16a439c7
   GYSDK: bd900870a591e2af65cf6dc8497de650b5aa1bcc
-  GySdkRN: c58bfd7247859c176f3ad657f3423d547213b16c
+  GySdkRN: 3f10f7523256e5229ac0282e32a44e4fa6e99c81
   hermes-engine: 4f07404533b808de66cf48ac4200463068d0e95a
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: efa5010912100e944a7ac9a93a157e1def1988fe

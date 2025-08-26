@@ -161,8 +161,8 @@ function App() {
         <Button
           title="login"
           onPress={() => {
-            GetuiGy.login((succ,code,msg)=>{
-            console.log('login result: ',succ, code, msg)
+            GetuiGy.login((succ,result,msg)=>{
+            console.log('login result: ',succ, result, msg)
             })
           }}
         />  

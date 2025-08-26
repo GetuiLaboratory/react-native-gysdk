@@ -1,6 +1,6 @@
 {
   "name": "react-native-gysdk",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Getui gy sdk plugin for react-native",
   "main": "index.js",
   "scripts": {
