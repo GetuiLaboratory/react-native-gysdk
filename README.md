@@ -10,7 +10,7 @@
 1. React Native Version 
    "react": "18.3.1"
    "react-native": "0.75.4"
-2. 当前react-native-gysdk版本 1.0.0
+2. 当前react-native-gysdk版本 1.0.3
 
 
 注意：
